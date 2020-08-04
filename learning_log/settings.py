@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'u8&o=tuwmu%9lq=&!!4wxncyxdr3q$*&xs5hpjtxvy+v4%#n*+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['pnvnd.herokuapp.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -62,7 +62,7 @@ ROOT_URLCONF = 'learning_log.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -134,7 +134,7 @@ LOGIN_URL = 'users:login'
 import django_heroku
 django_heroku.settings(locals())
 
-if os.environ.get('DEBUG') == 'TRUE':
+if os.environ.get('DEBUG_VALUE') == 'TRUE':
     DEBUG = True
-elif os.environ.get('DEBUG') == 'FALSE':
+elif os.environ.get('DEBUG_VALUE') == 'FALSE':
     DEBUG = False
