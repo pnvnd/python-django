@@ -19,7 +19,7 @@ def index(request):
 @login_required
 def topics(request):
     """Show all topics."""
-    topics = Topic.objects.filter(owner=request.user).order_by('date_added')
+    topics = Topic.objects.order_by('date_added') # filter(owner=request.user).
     context = {'topics': topics}
     return render(request, 'learning_logs/topics.html', context)
 
@@ -27,7 +27,7 @@ def topics(request):
 def topic(request, topic_id):
     """Show a single topic and all of its entrees."""
     topic = Topic.objects.get(id=topic_id)
-    check_topic_owner(topic.owner, request)
+    # check_topic_owner(topic.owner, request)
     entries = topic.entry_set.order_by('-date_added')
     context = {'topic': topic, 'entries': entries}
     return render(request, 'learning_logs/topic.html', context)
@@ -55,7 +55,7 @@ def new_topic(request):
 def new_entry(request, topic_id):
     """Add a new entry for a particular topic."""
     topic = Topic.objects.get(id=topic_id)
-    check_topic_owner(topic.owner, request)
+    # check_topic_owner(topic.owner, request)
 
     if request.method != 'POST':
         # No data submitted; create a blank form.
