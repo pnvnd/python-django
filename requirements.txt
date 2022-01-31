@@ -10,9 +10,11 @@ gunicorn
 isort
 lazy-object-proxy
 mccabe
+newrelic
 psycopg2
 pylint
 pytz
+requests
 six
 soupsieve
 sqlparse
