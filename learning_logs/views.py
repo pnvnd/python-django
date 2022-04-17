@@ -29,10 +29,10 @@ from opentelemetry.sdk.resources import Resource
 import uuid
 serviceId = str(uuid.uuid1())
 
-trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "python-django.local", "service.instance.id": serviceId, "environment": "local"})))
+trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "python-django.heroku", "service.instance.id": serviceId, "environment": "production"})))
 trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
 
-log_emitter_provider = LogEmitterProvider(resource=Resource.create({"service.name": "python-django.local", "service.instance.id": serviceId, "environment": "local"}))
+log_emitter_provider = LogEmitterProvider(resource=Resource.create({"service.name": "python-django.heroku", "service.instance.id": serviceId, "environment": "production"}))
 set_log_emitter_provider(log_emitter_provider)
 
 exporter = OTLPLogExporter(insecure=True)
