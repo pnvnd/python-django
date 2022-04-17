@@ -9,10 +9,6 @@ from .forms import TopicForm, EntryForm
 from opentelemetry.instrumentation.django import DjangoInstrumentor
 from opentelemetry.instrumentation.sqlite3 import SQLite3Instrumentor
 from opentelemetry.instrumentation.psycopg2 import Psycopg2Instrumentor
-from opentelemetry.instrumentation.requests import RequestsInstrumentor
-from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
-from opentelemetry.instrumentation.urllib import URLLibInstrumentor
-from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry import trace
@@ -49,10 +45,6 @@ logging.getLogger().addHandler(handler)
 DjangoInstrumentor().instrument()
 SQLite3Instrumentor().instrument()
 Psycopg2Instrumentor().instrument()
-RequestsInstrumentor().instrument()
-URLLib3Instrumentor().instrument()
-URLLibInstrumentor().instrument()
-LoggingInstrumentor().instrument(log_level=logging.DEBUG)
 
 # Create your views here.
 
