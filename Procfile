@@ -1,1 +1,1 @@
-web: newrelic-admin run-program gunicorn learning_log.wsgi --log-file -
+web: gunicorn learning_log.wsgi --log-file -

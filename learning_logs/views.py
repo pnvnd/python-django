@@ -5,6 +5,49 @@ from django.http import Http404
 from .models import Topic, Entry
 from .forms import TopicForm, EntryForm
 
+# OpenTelemetry Settings Imports
+from opentelemetry.instrumentation.django import DjangoInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
+from opentelemetry.instrumentation.logging import LoggingInstrumentor
+
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+
+import logging
+from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
+from opentelemetry.sdk._logs import LogEmitterProvider
+from opentelemetry.sdk._logs import set_log_emitter_provider
+from opentelemetry.sdk._logs import OTLPHandler
+from opentelemetry.sdk._logs.export import BatchLogProcessor
+
+from opentelemetry.sdk.resources import Resource
+
+# OpenTelemetry Settings
+import uuid
+serviceId = str(uuid.uuid1())
+
+trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "python-django.local", "service.instance.id": serviceId, "environment": "local"})))
+trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
+
+log_emitter_provider = LogEmitterProvider(resource=Resource.create({"service.name": "python-django.local", "service.instance.id": serviceId, "environment": "local"}))
+set_log_emitter_provider(log_emitter_provider)
+
+exporter = OTLPLogExporter(insecure=True)
+log_emitter_provider.add_log_processor(BatchLogProcessor(exporter))
+log_emitter = log_emitter_provider.get_log_emitter(__name__, "0.1")
+handler = OTLPHandler(level=logging.INFO, log_emitter=log_emitter)
+
+# Attach OTLP handler to root logger
+logging.getLogger().addHandler(handler)
+
+DjangoInstrumentor().instrument()
+RequestsInstrumentor().instrument()
+URLLib3Instrumentor().instrument()
+LoggingInstrumentor().instrument()
+
 # Create your views here.
 
 def check_topic_owner(owner, request):
